@@ -1,0 +1,67 @@
+from tkinter import *
+from tkinter import ttk
+root = Tk()
+root.title("Лабораторная работа №10")
+root.geometry("300x350")
+frame = Frame(root)
+clicks = 0
+num = 0
+x = 0
+y = 0
+corz=0
+cross=[]
+zero=[]
+col=0
+win=[[1,2,3],[4,5,6],[7,8,9],[1,4,7],[2,5,8],[3,6,9],[1,5,9],[3,5,7]]
+
+window = Toplevel()
+window.title("Старт")
+window.geometry("200x100")
+window.attributes("-topmost", True)
+def window_destroy():
+    window.destroy()
+def start(window):
+    start = Button(window, text='Начать игру', font='30', command=window_destroy)
+    start.pack(padx=10, pady=10, fill=BOTH, expand=True)
+start(window)
+def check():
+    for i in range(len(win)):
+        if win[i].count("X") == 3:
+            startagain["text"] = "Выиграл игрок Х. Начать сначала"
+        if win[i].count("O") == 3:
+            startagain["text"] = "Выиграл игрок O. Начать сначала"
+    if corz == 9:
+        print("Ничья")
+
+def click(button,n):
+    global corz
+    global col
+    if corz % 2 != 0:
+        button["text"] = "X"
+        button["state"] = DISABLED
+        cross.append(n)
+        corz += 1
+    else:
+        button["text"] = "O"
+        button["state"] = DISABLED
+        zero.append(n)
+        corz += 1
+    for i in range(len(win)):
+        for j in range(0, 3):
+            if win[i][j] == n and corz % 2 == 0:
+                win[i][j] = "X"
+            elif win[i][j] == n and corz % 2 != 0:
+                win[i][j] = "O"
+    check()
+
+for i in range(1,4):
+    for j in range(1,4):
+        num +=1
+        exec(f'button{num} = ttk.Button(command = lambda: click(button{num},{num}))')
+        exec(f'button{num}.place(x = {x}, y = {y}, width=100, height=100)')
+        y+=100
+    x+=100
+    y=0
+    startagain = ttk.Button()
+    startagain.place(x = 0, y = 300, width=300, height=50)
+root.mainloop()
